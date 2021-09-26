@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 
 class ArticleController extends Controller
 {
@@ -22,7 +24,7 @@ class ArticleController extends Controller
         // $optionsにトークンを指定
         $options = [
             'headers' => [
-                'Authorization' => 'Bearer ' . config('qiita.token'),
+                'Authorization' => 'Bearer ' . $this->getToken(),
             ],
         ];
         // Client(接続する為のクラス)を生成
@@ -46,7 +48,7 @@ class ArticleController extends Controller
         // $optionsにトークンを指定
         $options = [
             'headers' => [
-                'Authorization' => 'Bearer ' . config('qiita.token'),
+                'Authorization' => 'Bearer ' . $this->getToken(),
             ],
         ];
         // Client(接続する為のクラス)を生成
@@ -99,7 +101,7 @@ class ArticleController extends Controller
         // $optionsにトークンを指定
         $options = [
             'headers' => [
-                'Authorization' => 'Bearer ' . config('qiita.token'),
+                'Authorization' => 'Bearer ' . $this->getToken(),
                 'Content-Type' => 'application/json',
             ],
             'json' => $data,
@@ -137,7 +139,7 @@ class ArticleController extends Controller
         // $optionsにトークンを指定
         $options = [
             'headers' => [
-                'Authorization' => 'Bearer ' . config('qiita.token'),
+                'Authorization' => 'Bearer ' . $this->getToken(),
             ],
         ];
         // Client(接続する為のクラス)を生成
@@ -165,7 +167,7 @@ class ArticleController extends Controller
         // $optionsにトークンを指定
         $options = [
             'headers' => [
-                'Authorization' => 'Bearer ' . config('qiita.token'),
+                'Authorization' => 'Bearer ' . $this->getToken(),
             ],
         ];
         // Client(接続する為のクラス)を生成
@@ -195,7 +197,7 @@ class ArticleController extends Controller
         // $optionsにトークンを指定
         $options = [
             'headers' => [
-                'Authorization' => 'Bearer ' . config('qiita.token'),
+                'Authorization' => 'Bearer ' . $this->getToken(),
             ],
         ];
         // Client(接続する為のクラス)を生成
@@ -245,7 +247,7 @@ class ArticleController extends Controller
         // $optionsにトークンを指定
         $options = [
             'headers' => [
-                'Authorization' => 'Bearer ' . config('qiita.token'),
+                'Authorization' => 'Bearer ' . $this->getToken(),
                 'Content-Type' => 'application/json',
             ],
             'json' => $data,
@@ -276,7 +278,7 @@ class ArticleController extends Controller
 
         $options = [
             'headers' => [
-                'Authorization' => 'Bearer ' . config('qiita.token'),
+                'Authorization' => 'Bearer ' . $this->getToken(),
             ],
         ];
         $client = new Client();
@@ -288,4 +290,10 @@ class ArticleController extends Controller
         }
         return redirect()->route('articles.index')->with('flash_message', '記事を削除しました');;
     }
+
+    protected function getToken ()
+    {
+        return Crypt::decryptString(Auth::user()->token);
+    }
 }
+
